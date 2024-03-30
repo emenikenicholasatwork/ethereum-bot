@@ -1,9 +1,9 @@
-import { Telegraf, Markup, Context } from "telegraf";
+import { Telegraf } from "telegraf";
 import * as dotenv from 'dotenv'
 dotenv.config()
 import Wallet from "./wallet/wallet";
+import Keyboard from "./keyboard/Keyboard";
 import { InlineKeyboardMarkup } from "telegraf/typings/core/types/typegram";
-import { inlineKeyboard } from "telegraf/typings/markup";
 
 
 //create new instance of the telegraf
@@ -11,19 +11,6 @@ const bot = new Telegraf(process.env.TOKEN || '')
 let state: string = ''
 
 bot.start(async context => {
-    // Construct the inline keyboard markup directly
-    const keyboardMarkup: InlineKeyboardMarkup = {
-        inline_keyboard: [
-            [
-                { text: 'Buy', callback_data: 'buy' },
-                { text: 'Sell', callback_data: 'sell' }
-            ],
-            [
-                { text: 'Positions', callback_data: 'position' },
-
-            ]
-        ]
-    };
 
     //create new etherium wallet
     let new_account = await Wallet.create_new_account()
@@ -45,7 +32,7 @@ Click on the Refresh button to update your balance.
         `,
         {
             parse_mode: 'HTML',
-            reply_markup: keyboardMarkup
+            reply_markup: Keyboard.menu_keyboard()
         }
     );
 });
